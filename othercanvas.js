@@ -3,6 +3,13 @@
 */
 
 var context;
+/*
+
+const socket = new WebSocket('ws://localhost:8080');
+socket.onconnection = ({data}) => {
+    console.log('Client connected');
+};
+*/
 
 // Check for the canvas tag onload.
 if(window.addEventListener) { 
@@ -43,6 +50,18 @@ window.addEventListener('load', function () {
             context = canvas.getContext('2d'); 
             context.strokeStyle = "#FFFFFF";// Default line color
             context.lineWidth = 1.0;// Default stroke weight
+
+            /*
+            var slider = document.getElementById("myRange");
+            var output = document.getElementById("demo");
+            output.innerHTML = slider.value; // Display the default slider value
+
+            // Update the current slider value (each time you drag the slider handle)
+            slider.oninput = function() {
+                output.innerHTML = this.value;
+                context.lineWidth = this.value;
+            }
+            */
  
             // Fill transparent canvas with dark gray
             context.fillStyle = "#424242"; 
@@ -186,7 +205,68 @@ window.addEventListener('load', function () {
                 } 
             }; 
         };
+       
 
         init();
     }, 
 false);}
+
+window.onload = function() { 
+    var bMouseIsDown = false; 
+      
+       var oCanvas = document.getElementById("drawingCanvas"); 
+       var oCtx = oCanvas.getContext("2d"); 
+    var iWidth = oCanvas.width; 
+       var iHeight = oCanvas.height; 
+    function showDownloadText() { 
+       document.getElementById("textdownload").style.display = "block"; 
+       } 
+    function hideDownloadText() { 
+       document.getElementById("textdownload").style.display = "none"; 
+       } 
+    function convertCanvas(strType) { 
+       if (strType == "PNG") 
+       var oImg = Canvas2Image.saveAsPNG(oCanvas, true); 
+       if (strType == "BMP") 
+       var oImg = Canvas2Image.saveAsBMP(oCanvas, true); 
+       if (strType == "JPEG") 
+       var oImg = Canvas2Image.saveAsJPEG(oCanvas, true); 
+     if (!oImg) { 
+       alert("Sorry, this browser is not capable of saving." + strType + " files!"); 
+       return false; 
+       } 
+    oImg.id = "canvasimage"; 
+     oImg.style.border = oCanvas.style.border; 
+       oCanvas.parentNode.replaceChild(oImg, oCanvas); 
+    howDownloadText(); 
+       } 
+    function saveCanvas(pCanvas, strType) { 
+       var bRes = false; 
+       if (strType == "PNG") 
+       bRes = Canvas2Image.saveAsPNG(oCanvas); 
+       if (strType == "BMP") 
+       bRes = Canvas2Image.saveAsBMP(oCanvas); 
+       if (strType == "JPEG") 
+       bRes = Canvas2Image.saveAsJPEG(oCanvas); 
+    if (!bRes) { 
+       alert("Sorry, this browser is not capable of saving " + strType + " files!"); 
+       return false; 
+       } 
+       } 
+    document.getElementById("convertpngbtn").onclick = function() { 
+       convertCanvas("PNG"); 
+       } 
+    document.getElementById("resetbtn").onclick = function() { 
+       var oImg = document.getElementById("canvasimage"); 
+       oImg.parentNode.replaceChild(oCanvas, oImg); 
+     hideDownloadText(); 
+       }};
+//console.log(data);
+
+//};
+/*
+
+client.on('end', () => {
+    console.log('Client disconnected.');
+});
+*/
