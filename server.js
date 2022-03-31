@@ -1,10 +1,30 @@
-const WebSocket = require('ws')
-const server = new WebSocket.Server({port: '8080'})
+
+import { Server } from 'socket.io';
+const server = new Server({ port: '8080'})
+
+server.on('connection', socket => {
+  console.log('Server connected')
+
+  server.on ('img_update', (data) =>
+		socket.broadcast.emit('img_update',{ x : data.x, y : data.y, type: data.type}
+		
+    )
+)}).call(this);
+
+
+
+
+
+
+/*
+import { Server } from 'ws'
+const server = new Server({port: '8080'})
 
 server.on('connection', socket => {
 
   console.log('Connection found.')
 })
+*/
 /*
 (function() {
     var io;
