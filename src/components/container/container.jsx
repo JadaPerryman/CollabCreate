@@ -2,6 +2,7 @@ import React from 'react';
 import Board from '../board/board';
 import Save from '../save/save';
 import './style.css';
+import collabLogo from '../container/collabCreateLogo.png';
 
 class Container extends React.Component
 {
@@ -38,6 +39,9 @@ class Container extends React.Component
     render() {
         return (
             <div className="container">
+                <div>
+                    <img className = "CLogo" src={collabLogo} alt = "Collab Create Logo" />
+                </div>
             
                 <div class="tools-section">
                     <div className="color-picker-container">
@@ -65,6 +69,10 @@ class Container extends React.Component
                             <option> Rectangle </option>
                             <option> Line </option>
                         </select>
+                    </div>
+
+                    <div className="clear-container">
+                    <button onClick={this.clearCanvas}>Clear</button>
                     </div>
 
                     <div className="save-container">

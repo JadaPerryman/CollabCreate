@@ -10,7 +10,7 @@ class Board extends React.Component {
 
     ctx;
     isDrawing = false;
-
+    tool_selected = "Chalk"
 
     
 
@@ -27,9 +27,10 @@ class Board extends React.Component {
                 var image = new Image();
                 var canvas = document.querySelector('#board');
                 var ctx = canvas.getContext('2d');
+                var tool_selected = document.getElementById("tool_select");
                 image.onload = function() {
                     ctx.drawImage(image, 0, 0);
-
+                    tool_selected = this.tool_selected;
                     root.isDrawing = false;    
                 };
                 image.src = data;
@@ -44,7 +45,7 @@ class Board extends React.Component {
     componentWillReceiveProps(newProps){
         this.ctx.strokeStyle = newProps.color;
         this.ctx.lineWidth = newProps.size;
-        this.ctx.tool_selected = newProps.tool;
+        this.tool_selected = newProps.tool;
     }
 
     saveCanvas() {
@@ -55,17 +56,38 @@ class Board extends React.Component {
         console.log('Saved!');
       }
 
+       clearCanvas ()  {
+        
+        const canvas = document.querySelector('#board');
+        this.ctx = canvas.getContext("2d");
+        var ctx = this.ctx;
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        var root = this;
+
+        
+        //Passing clear screen
+        if (root.timeout !== undefined) clearTimeout(root.timeout);
+        root.timeout = setTimeout(function () {
+          var base64ImageData = canvas.toDataURL("image/png");
+          localStorage.setItem("canvasimg", base64ImageData);
+        }, 1000);
+        
+      };
+
     drawOnCanvas() {
         var canvas = document.querySelector('#board');
         this.ctx = canvas.getContext('2d');
         var ctx = this.ctx;
+        this.tool_selected = document.getElementById("tool_select");
+        //var tool = this.tool_selected;
 
         var sketch = document.querySelector('#sketch');
         var sketch_style = getComputedStyle(sketch);
         canvas.width = parseInt(sketch_style.getPropertyValue('width'));
         canvas.height = parseInt(sketch_style.getPropertyValue('height'));
 
-        var tools = document.getElementById("tool_select");
+        
 
         var mouse = {x: 0, y: 0};
         var last_mouse = {x: 0, y: 0};
@@ -73,11 +95,43 @@ class Board extends React.Component {
         
         // Mouse Capturing Work 
         canvas.addEventListener('mousemove', function(e) {
-            last_mouse.x = mouse.x;
-            last_mouse.y = mouse.y;
+            //if (tool == "Chalk"){
+                last_mouse.x = mouse.x;
+                last_mouse.y = mouse.y;
 
-            mouse.x = e.pageX - this.offsetLeft;
-            mouse.y = e.pageY - this.offsetTop;
+                mouse.x = e.pageX - this.offsetLeft;
+                mouse.y = e.pageY - this.offsetTop;
+
+                //ctx.lineTo(mouse.x, mouse.y);
+                //ctx.stroke();
+            //}
+            /*
+            else if (tool == "Rectangle")
+            {
+                // Creates a rectangle on the canvas 
+                var x = Math.min(mouse.x,  last_mouse.x), 
+                y = Math.min(mouse.y,  last_mouse.y), 
+                w = Math.abs(mouse.x - last_mouse.x), 
+                h = Math.abs(mouse.y - last_mouse.y); 
+                ctx.clearRect(0, 0, canvas.width, canvas.height);// Clears the rectangle onload
+    
+                if (!w || !h) { 
+                    return; 
+                } 
+                ctx.strokeRect(x, y, w, h); 
+
+            }
+            else if (tool == "Line")
+            {
+                ctx.clearRect(0, 0, canvas.width, canvas.height); 
+                // Begin the line
+                ctx.moveTo(last_mouse.x, last_mouse.y); 
+                ctx.lineTo(mouse.x, mouse.y); 
+                ctx.stroke();  
+
+            }
+            */
+            
         }, false);
 
 
@@ -86,7 +140,7 @@ class Board extends React.Component {
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
         ctx.strokeStyle = this.props.color;
-        ctx.tool_selected = this.props.tool;
+        this.tool_selected = this.props.tool;
 
         canvas.addEventListener('mousedown', function(e) {
             canvas.addEventListener('mousemove', onPaint, false);
@@ -98,29 +152,20 @@ class Board extends React.Component {
 
         var root = this;
         var onPaint = function() {
-            if (tools ="Chalk"){
- 
             ctx.beginPath();
             ctx.moveTo(last_mouse.x, last_mouse.y);
             ctx.lineTo(mouse.x, mouse.y);
             ctx.closePath();
             ctx.stroke();
-            
-            } 
-            
-                        
+          
             if(root.timeout != undefined) clearTimeout(root.timeout);
                 root.timeout = setTimeout(function(){
                     var base64ImageData = canvas.toDataURL("image/png");
                     root.socket.emit("canvas-data", base64ImageData);
             }, 1000)
         };
- 
-     
-    
-    
-           
-       
+
+  
     }
 
     render() {

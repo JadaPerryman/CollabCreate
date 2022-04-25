@@ -5,6 +5,12 @@
     background: linear-gradient(45deg, #03A9F4, #4CAF50);
 }
 
+.CLogo {
+    margin-left: 600px;
+    height: 100px;
+    width: 300px;
+}
+
 .color-picker-container {
     text-align: center;
     display: inline;
@@ -23,6 +29,14 @@
     margin-left: 12px;
 }
 
+.clear-container {
+    display:inline;
+    color: white;
+    margin-left: 12px;
+    cursor: pointer;
+}
+
+
 .save-container {
     display:inline;
     color: white;
@@ -38,7 +52,7 @@
 
 .board-container {
     width: 90%;
-    height: 90%;
+    height: 75%;
     margin: auto;
     margin-top: 1%;
     background: white;
