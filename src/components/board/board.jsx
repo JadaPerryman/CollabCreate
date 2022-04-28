@@ -1,12 +1,12 @@
 import React from 'react';
-import io from 'socket.io-client';
+import io from 'socket.io-client'; 
 
 import './style.css';
 
 class Board extends React.Component {
 
     timeout;
-    socket = io.connect("http://localhost:3000");
+    socket = io.connect("http://localhost:3000"); //Creates connection from client to server
 
     ctx;
     isDrawing = false;
@@ -42,6 +42,7 @@ class Board extends React.Component {
         this.drawOnCanvas();
     }
 
+    //Constructor to reference the differnt functions
     componentWillReceiveProps(newProps){
         this.ctx.strokeStyle = newProps.color;
         this.ctx.lineWidth = newProps.size;
