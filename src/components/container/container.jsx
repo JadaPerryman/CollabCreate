@@ -6,6 +6,7 @@ import collabLogo from '../container/collabCreateLogo.png';
 
 class Container extends React.Component
 {
+    //Constructor to set the default for each function
     
     constructor(props){
         super(props);
@@ -38,6 +39,7 @@ class Container extends React.Component
 
     render() {
         return (
+            //Establishes the UI for the website
             <div className="container">
                 <div>
                     <img className = "CLogo" src={collabLogo} alt = "Collab Create Logo" />
@@ -49,7 +51,7 @@ class Container extends React.Component
                         <input type="color" value = {this.state.color} onChange={this.changeColor.bind(this)}/>
                     </div>
 
-                    <div className="brushsize-container">
+                    <div className="brushsize-container"> //Different sizes for the brush
                     Select Brush Size : &nbsp;
                         <select value ={this.state.size} onChange={this.changeSize.bind(this)}>
                             <option> 5 </option>
